@@ -4,7 +4,24 @@ import { Routes, Route, Navigate } from "react-router-dom"
 
 import { NewNote } from "./cmps/NewNote"
 
+export type Note = {
+  id: string
+} & NoteData
+
+export type NoteData = {
+  title: string
+  markdown: string
+  tags: Tag[]
+}
+
+export type Tag = {
+  id: string
+  label: string
+}
+
 function App() {
+  const [notes, setNotes] = useLocalStorage<RawNote[]>("notes", [])
+
   return (
     <Container>
       <Routes>
