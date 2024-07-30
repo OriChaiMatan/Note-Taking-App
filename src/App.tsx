@@ -6,7 +6,9 @@ import { v4 as uuidV4 } from "uuid"
 
 import { useLocalStorage } from "./services/useLocalStorage"
 
+import { NoteList } from "./cmps/NoteList"
 import { NewNote } from "./cmps/NewNote"
+
 
 export type Note = {
   id: string
@@ -57,9 +59,9 @@ function App() {
   }
 
   return (
-    <Container>
+    <Container className="my-4">
       <Routes>
-        <Route path="/" element={<h1>home</h1>} />
+        <Route path="/" element={<NoteList availableTags={tags}/>} />
         <Route path="/new" element={<NewNote onSubmit={onCreateNote} onAddTag={addTag} availableTags={tags}/>} />
         <Route path="/:id" element={<h1>show</h1>} />
         <Route path="/:id/edit" element={<h1>edit</h1>} />
