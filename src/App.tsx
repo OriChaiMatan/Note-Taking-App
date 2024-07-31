@@ -8,6 +8,8 @@ import { useLocalStorage } from "./services/useLocalStorage"
 
 import { NoteList } from "./cmps/NoteList"
 import { NewNote } from "./cmps/NewNote"
+import { NoteLayout } from "./cmps/NoteLayout"
+import { Note } from "./cmps/Note"
 
 
 export type Note = {
@@ -54,17 +56,25 @@ function App() {
     })
   }
 
-  function addTag(tag: Tag){
+  function addTag(tag: Tag) {
     setTags(prev => [...prev, tag])
+  }
+
+  function onDeleteNote(id: string) {
+    setNotes(prevNotes => {
+      return prevNotes.filter(note => note.id !== id)
+    })
   }
 
   return (
     <Container className="my-4">
       <Routes>
-        <Route path="/" element={<NoteList notes={notesWithTags} availableTags={tags}/>} />
-        <Route path="/new" element={<NewNote onSubmit={onCreateNote} onAddTag={addTag} availableTags={tags}/>} />
-        <Route path="/:id" element={<h1>show</h1>} />
-        <Route path="/:id/edit" element={<h1>edit</h1>} />
+        <Route path="/" element={<NoteList notes={notesWithTags} availableTags={tags} />} />
+        <Route path="/new" element={<NewNote onSubmit={onCreateNote} onAddTag={addTag} availableTags={tags} />} />
+        <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
+          <Route index element={<Note onDelete={onDeleteNote} />} />
+          <Route path="edit" element={<h1>edit</h1>} />
+        </Route>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Container>
