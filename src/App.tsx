@@ -10,6 +10,7 @@ import { NoteList } from "./cmps/NoteList"
 import { NewNote } from "./cmps/NewNote"
 import { NoteLayout } from "./cmps/NoteLayout"
 import { Note } from "./cmps/Note"
+import { EditNote } from "./cmps/EditNote"
 
 
 export type Note = {
@@ -66,6 +67,18 @@ function App() {
     })
   }
 
+  function onUpdateNote(id: string, { tags, ...data }: NoteData) {
+    setNotes(prevNotes => {
+      return prevNotes.map(note => {
+        if (note.id === id) {
+          return { ...note, ...data, tagIds: tags.map(tag => tag.id) }
+        } else {
+          return note
+        }
+      })
+    })
+  }
+
   return (
     <Container className="my-4">
       <Routes>
@@ -73,7 +86,7 @@ function App() {
         <Route path="/new" element={<NewNote onSubmit={onCreateNote} onAddTag={addTag} availableTags={tags} />} />
         <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
           <Route index element={<Note onDelete={onDeleteNote} />} />
-          <Route path="edit" element={<h1>edit</h1>} />
+          <Route path="edit" element={<EditNote onSubmit={onUpdateNote} onAddTag={addTag} availableTags={tags}/>} />
         </Route>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
